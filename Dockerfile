@@ -1,4 +1,4 @@
-FROM million12/centos-supervisor:latest
+FROM centos:centos6
 
 # Update latest packages
 RUN yum -y update
@@ -14,15 +14,15 @@ RUN yum -y --enablerepo=remi install mysql-server
 RUN yum clean all
 
 ENV DATADIR /var/lib/mysql
-ENV ROOTPASSWD Passw0rd
-ENV DBUSER dbuser
-ENV DBNAME db
-ENV DBPASSWD Passw0rd
+ENV ROOTPASSWD password123
+ENV DBUSER wordpress
+ENV DBNAME wordpress
+ENV DBPASSWD password123
+ENV DBSOURCEPATH /wordpress.sql
 
 EXPOSE 3306
 
 ADD images/containers/mysql/start.sh /start.sh
+ADD images/containers/mysql/wordpress.sql /wordpress.sql
 
 CMD ["/start.sh", "-D", "FOREGROUND"]
-
-
