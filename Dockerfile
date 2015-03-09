@@ -1,20 +1,28 @@
-FROM jacekelgda/docker-centos-nginx:latest
+FROM million12/centos-supervisor:latest
 
-RUN \
-  yum install -y yum-utils && \
+# Update latest packages
+RUN yum -y update
 
-  `# Install PHP 5.6` \
-  rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
-  yum-config-manager -q --enable remi && \
-  yum-config-manager -q --enable remi-php56 && \
-  yum install -y php-fpm php-bcmath php-cli php-gd php-intl php-mbstring \
-  	php-mcrypt php-mysql php-opcache php-pdo && \
-  yum install -y --disablerepo=epel php-pecl-redis php-pecl-yaml && \
+# Install REMI and EPEL repositories
+RUN yum -y localinstall http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+RUN yum -y localinstall http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 
-  yum clean all
+# Install MySQL 5.5
+RUN yum -y --enablerepo=remi install mysql-server
 
-ADD docker/images/php/container-files /
+# Clean yum cache
+RUN yum clean all
 
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/bin/composer
+ENV DATADIR /var/lib/mysql
+ENV ROOTPASSWD Passw0rd
+ENV DBUSER dbuser
+ENV DBNAME db
+ENV DBPASSWD Passw0rd
+
+EXPOSE 3306
+
+ADD images/containers/mysql/start.sh /start.sh
+
+CMD ["/start.sh", "-D", "FOREGROUND"]
+
 
