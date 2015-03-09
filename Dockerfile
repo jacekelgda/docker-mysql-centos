@@ -22,7 +22,7 @@ ENV DBSOURCEPATH /wordpress.sql
 
 EXPOSE 3306
 
-ADD images/containers/mysql/start.sh /start.sh
-ADD images/containers/mysql/wordpress.sql /wordpress.sql
+ADD docker/containers/mysql/start.sh /start.sh
+ADD docker/containers/mysql/wordpress.sql /wordpress.sql
 
 CMD ["/start.sh", "-D", "FOREGROUND"]
