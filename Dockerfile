@@ -17,6 +17,7 @@ ENV DATADIR /var/lib/mysql
 ENV ROOTPASSWD password123
 ENV DBUSER wordpress
 ENV DBNAME wordpress
+ENV DBTESTNAME wordpress_test
 ENV DBPASSWD password123
 ENV DBSOURCEPATH /wordpress.sql
 
